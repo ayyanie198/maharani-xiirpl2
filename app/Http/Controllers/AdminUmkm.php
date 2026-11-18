@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Portofolio;
+use App\Models\Produk;
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ class AdminUmkm extends Controller
         $websiteAktif = Portofolio::where('status_website', 'aktif')->count();
         $websiteDraft = Portofolio::where('status_website', 'draft')->count();
         $websiteNonaktif = Portofolio::where('status_website', 'nonaktif')->count();
-        $totalProduk = \App\Models\Produk::count();
+        $totalProduk = Produk::count();
         $aktivitasHariIni = LogAktivitas::whereDate('created_at', today())->count();
         $aktivitasTerbaru = LogAktivitas::with('admin')->orderBy('created_at', 'desc')->take(5)->get();
         $websiteTerbaru = Portofolio::orderBy('created_at', 'desc')->take(5)->get();
@@ -28,15 +29,20 @@ class AdminUmkm extends Controller
     }
 
     public function index()
-    {
-        $umkm = Portofolio::with('admin')->orderBy('created_at', 'desc')->get();
-        return view('AdminUmkm.index', compact('umkm'));
-    }
+{
+    $umkm = Portofolio::with('admin')->orderBy('created_at', 'desc')->get();
+    return view('AdminUmkm.index', compact('umkm'));
+}
 
-    public function create()
-    {
-        return view('AdminUmkm.create');
-    }
+public function create()
+{
+    // 🌟 PERBAIKAN: Kirim data UMKM ke view
+    $umkmList = \App\Models\Portofolio::orderBy('nama_toko', 'asc')->get();
+    $selectedUmkm = null;
+    
+    return view('AdminUmkm.create', compact('umkmList', 'selectedUmkm'));
+}
+
 
     public function store(Request $request)
     {
@@ -54,32 +60,10 @@ class AdminUmkm extends Controller
             'tahun_berdiri' => 'nullable|integer',
             'instagram' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:100',
-            'testimoni_nama.*' => 'nullable|string|max:100',
-            'testimoni_rating.*' => 'nullable|integer|min:1|max:5',
-            'testimoni_pesan.*' => 'nullable|string',
-            'produk_nama.*' => 'nullable|string|max:100',
-            'produk_harga.*' => 'nullable|numeric|min:0',
-            'produk_stok.*' => 'nullable|in:tersedia,habis',
-            'produk_foto.*' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'produk_deskripsi.*' => 'nullable|string',
         ]);
 
         $logoPath = $request->hasFile('logo') ? $request->file('logo')->store('uploads/umkm', 'public') : null;
         $heroPath = $request->hasFile('foto_hero') ? $request->file('foto_hero')->store('uploads/umkm', 'public') : null;
-
-        // Proses Testimoni
-        $testimoniData = [];
-        if ($request->has('testimoni_nama')) {
-            foreach ($request->testimoni_nama as $index => $nama) {
-                if (!empty(trim($nama))) {
-                    $testimoniData[] = [
-                        'nama' => trim($nama),
-                        'rating' => (int)($request->testimoni_rating[$index] ?? 5),
-                        'pesan' => trim($request->testimoni_pesan[$index] ?? ''),
-                    ];
-                }
-            }
-        }
 
         $portofolio = Portofolio::create([
             'nama_toko' => $validated['nama_toko'],
@@ -95,26 +79,25 @@ class AdminUmkm extends Controller
             'tahun_berdiri' => $request->tahun_berdiri,
             'instagram' => $request->instagram,
             'jam_operasional' => $request->jam_operasional,
-            'testimoni' => !empty($testimoniData) ? json_encode($testimoniData) : null,
             'status_website' => 'draft',
             'id_admin' => Session::get('admin_id'),
+            'tgl_daftar' => now(),
         ]);
 
-        // Simpan Produk Inline
+        // Simpan Produk Inline (tanpa nama_kategori agar tidak error)
         if ($request->has('produk_nama')) {
             foreach ($request->produk_nama as $index => $namaProduk) {
-                if (!empty($namaProduk)) {
+                if (!empty(trim($namaProduk))) {
                     $fotoProduk = $request->hasFile("produk_foto.$index") 
                         ? $request->file("produk_foto.$index")->store('uploads/produk', 'public') 
                         : null;
 
-                    \App\Models\Produk::create([
+                    Produk::create([
                         'id_toko' => $portofolio->id_toko,
-                        'nama_produk' => $namaProduk,
+                        'nama_produk' => trim($namaProduk),
                         'harga' => $request->produk_harga[$index] ?? 0,
                         'status_stok' => $request->produk_stok[$index] ?? 'tersedia',
                         'foto' => $fotoProduk,
-                        'nama_kategori' => 'Umum',
                         'deskripsi' => $request->produk_deskripsi[$index] ?? null,
                     ]);
                 }
@@ -123,12 +106,13 @@ class AdminUmkm extends Controller
 
         LogAktivitas::create([
             'jenis_aktivitas' => 'Tambah Website',
-            'deskripsi_aktivitas' => "Administrator menambahkan website UMKM: {$portofolio->nama_toko}",
+            'deskripsi_aktivitas' => "Administrator Doodlune menambahkan website UMKM: {$portofolio->nama_toko}",
             'id_admin' => Session::get('admin_id'),
         ]);
 
-        return redirect()->route('admin.umkm.index')
-            ->with('success', "Website UMKM '{$portofolio->nama_toko}' berhasil dibuat!");
+        // 🌸 REDIRECT LANGSUNG KE HALAMAN DETAIL UMKM YANG BARU DIBUAT
+        return redirect()->route('admin.umkm.show', $portofolio->id_toko)
+            ->with('success', "Website UMKM '{$portofolio->nama_toko}' berhasil dibuat! 🌸");
     }
 
     public function show($id)
@@ -139,7 +123,7 @@ class AdminUmkm extends Controller
 
     public function edit($id)
     {
-        $umkm = Portofolio::findOrFail($id);
+        $umkm = Portofolio::with('produk')->findOrFail($id);
         return view('AdminUmkm.edit', compact('umkm'));
     }
 
@@ -161,32 +145,20 @@ class AdminUmkm extends Controller
             'tahun_berdiri' => 'nullable|integer',
             'instagram' => 'nullable|string|max:255',
             'jam_operasional' => 'nullable|string|max:100',
-            'testimoni_nama.*' => 'nullable|string|max:100',
-            'testimoni_rating.*' => 'nullable|integer|min:1|max:5',
-            'testimoni_pesan.*' => 'nullable|string',
         ]);
 
         if ($request->hasFile('logo')) {
             if ($umkm->logo) Storage::disk('public')->delete($umkm->logo);
             $validated['logo'] = $request->file('logo')->store('uploads/umkm', 'public');
+        } else {
+            $validated['logo'] = $umkm->logo;
         }
 
         if ($request->hasFile('foto_hero')) {
             if ($umkm->foto_hero) Storage::disk('public')->delete($umkm->foto_hero);
             $validated['foto_hero'] = $request->file('foto_hero')->store('uploads/umkm', 'public');
-        }
-
-        $testimoniData = [];
-        if ($request->has('testimoni_nama')) {
-            foreach ($request->testimoni_nama as $index => $nama) {
-                if (!empty(trim($nama))) {
-                    $testimoniData[] = [
-                        'nama' => trim($nama),
-                        'rating' => (int)($request->testimoni_rating[$index] ?? 5),
-                        'pesan' => trim($request->testimoni_pesan[$index] ?? ''),
-                    ];
-                }
-            }
+        } else {
+            $validated['foto_hero'] = $umkm->foto_hero;
         }
 
         $umkm->update([
@@ -197,18 +169,17 @@ class AdminUmkm extends Controller
             'deskripsi' => $validated['deskripsi'],
             'slug' => $validated['slug'],
             'template' => $validated['template'],
-            'logo' => $validated['logo'] ?? $umkm->logo,
-            'foto_hero' => $validated['foto_hero'] ?? $umkm->foto_hero,
+            'logo' => $validated['logo'],
+            'foto_hero' => $validated['foto_hero'],
             'cerita_usaha' => $request->cerita_usaha,
             'tahun_berdiri' => $request->tahun_berdiri,
             'instagram' => $request->instagram,
             'jam_operasional' => $request->jam_operasional,
-            'testimoni' => !empty($testimoniData) ? json_encode($testimoniData) : null,
         ]);
 
         LogAktivitas::create([
             'jenis_aktivitas' => 'Edit Website',
-            'deskripsi_aktivitas' => "Administrator memperbarui website UMKM: {$umkm->nama_toko}",
+            'deskripsi_aktivitas' => "Administrator Doodlune memperbarui website UMKM: {$umkm->nama_toko}",
             'id_admin' => Session::get('admin_id'),
         ]);
 
@@ -223,12 +194,13 @@ class AdminUmkm extends Controller
 
         if ($umkm->logo) Storage::disk('public')->delete($umkm->logo);
         if ($umkm->foto_hero) Storage::disk('public')->delete($umkm->foto_hero);
-
+        
+        $umkm->produk()->delete();
         $umkm->delete();
 
         LogAktivitas::create([
             'jenis_aktivitas' => 'Hapus Website',
-            'deskripsi_aktivitas' => "Administrator menghapus website UMKM: {$namaToko}",
+            'deskripsi_aktivitas' => "Administrator Doodlune menghapus website UMKM: {$namaToko}",
             'id_admin' => Session::get('admin_id'),
         ]);
 
@@ -250,11 +222,11 @@ class AdminUmkm extends Controller
 
         LogAktivitas::create([
             'jenis_aktivitas' => 'Publish Website',
-            'deskripsi_aktivitas' => "Administrator mempublikasikan website UMKM: {$umkm->nama_toko}",
+            'deskripsi_aktivitas' => "Administrator Doodlune mempublikasikan website UMKM: {$umkm->nama_toko}",
             'id_admin' => Session::get('admin_id'),
         ]);
 
-        return back()->with('success', "Website '{$umkm->nama_toko}' berhasil dipublikasikan!");
+        return back()->with('success', "Website '{$umkm->nama_toko}' berhasil DIPUBLIKASIKAN!");
     }
 
     public function nonaktifkan($id)
@@ -264,10 +236,10 @@ class AdminUmkm extends Controller
 
         LogAktivitas::create([
             'jenis_aktivitas' => 'Nonaktifkan Website',
-            'deskripsi_aktivitas' => "Administrator menonaktifkan website UMKM: {$umkm->nama_toko}",
+            'deskripsi_aktivitas' => "Administrator Doodlune menonaktifkan website UMKM: {$umkm->nama_toko}",
             'id_admin' => Session::get('admin_id'),
         ]);
 
-        return back()->with('success', "Website '{$umkm->nama_toko}' berhasil dinonaktifkan!");
+        return back()->with('success', "Website '{$umkm->nama_toko}' berhasil DINONAKTIFKAN!");
     }
 }

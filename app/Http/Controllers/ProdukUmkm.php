@@ -151,4 +151,25 @@ class ProdukUmkm extends Controller
         return redirect()->route('admin.produk.index')
             ->with('success', "Produk '{$namaProduk}' berhasil dihapus.");
     }
+
+    // Method baru: Ambil daftar produk untuk dropdown salin
+public function getExistingProducts()
+{
+    $products = Produk::with('portofolio')
+        ->select('id_kategori', 'nama_produk', 'harga', 'deskripsi', 'status_stok', 'id_toko')
+        ->orderBy('nama_produk')
+        ->get()
+        ->map(function ($p) {
+            return [
+                'id' => $p->id_kategori,
+                'nama' => $p->nama_produk,
+                'harga' => $p->harga,
+                'deskripsi' => $p->deskripsi ?? '',
+                'status_stok' => $p->status_stok,
+                'toko' => $p->portofolio->nama_toko ?? 'Unknown',
+            ];
+        });
+
+    return response()->json($products);
+}
 }

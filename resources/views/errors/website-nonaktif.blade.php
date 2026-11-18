@@ -3,30 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Tidak Tersedia - {{ $umkm->nama_toko }}</title>
+    <title>Website Tidak Tersedia - {{ $umkm->nama_toko }} | Doodlune 🌸</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-md w-full text-center">
-        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <i class="fas fa-ban text-red-500 text-4xl"></i>
-        </div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-3">Website Sedang Tidak Tersedia</h1>
-        <p class="text-gray-600 mb-2">Website <strong>{{ $umkm->nama_toko }}</strong> saat ini sedang dinonaktifkan oleh pemiliknya.</p>
-        <p class="text-sm text-gray-500 mb-6">Silakan kunjungi kembali nanti atau hubungi pemilik langsung.</p>
+<body class="bg-[#FFF5F7] min-h-screen flex items-center justify-center p-4">
+    
+    <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center border-2 border-[#FFD1DC] relative overflow-hidden">
+        <!-- Dekorasi Background Lucu (Konsisten dengan halaman error lainnya) -->
+        <div class="absolute top-0 right-0 w-40 h-40 bg-[#FFF0F5] rounded-full -mr-20 -mt-20 opacity-60"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-[#FFF0F5] rounded-full -ml-16 -mb-16 opacity-60"></div>
         
-        @if($umkm->no_hp)
-            <a href="https://wa.me/{{ preg_replace('/^0/', '62', $umkm->no_hp) }}" target="_blank" 
-               class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition">
-                <i class="fab fa-whatsapp mr-2 text-xl"></i>
-                Hubungi Pemilik
-            </a>
-        @endif
-        
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-xs text-gray-400">Powered by <span class="text-blue-600 font-bold">TintaKita</span></p>
+        <div class="relative z-10">
+            <!-- Ikon Doodle -->
+            <div class="w-24 h-24 bg-[#FFF0F5] rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-[#FFD1DC] shadow-sm">
+                <i class="fas fa-eye-slash text-4xl text-[#FF6B9D]"></i>
+            </div>
+            
+            <!-- Teks Utama -->
+            <h1 class="font-serif text-3xl font-bold text-[#4A3040] mb-3">Website Sedang Tidak Aktif 🌸</h1>
+            <p class="text-[#C44569] mb-2">
+                Website <strong>{{ $umkm->nama_toko }}</strong> saat ini sedang dinonaktifkan sementara oleh pemiliknya.
+            </p>
+            <p class="text-sm text-[#C44569]/80 mb-6">
+                Silakan kunjungi kembali nanti atau hubungi pemilik langsung melalui WhatsApp.
+            </p>
+            
+            <!-- Tombol WhatsApp (Warna hijau dipertahankan untuk brand recognition) -->
+            @if($umkm->no_hp)
+                <a href="https://wa.me/{{ preg_replace('/^0/', '62', $umkm->no_hp) }}" target="_blank" 
+                   class="inline-flex items-center bg-[#25D366] hover:bg-[#128C7E] text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <i class="fab fa-whatsapp mr-2 text-xl"></i>
+                    Hubungi Pemilik
+                </a>
+            @endif
+            
+            <!-- Footer -->
+            <div class="mt-8 pt-6 border-t border-[#FFF0F5]">
+                <p class="text-xs text-[#C44569]/60">
+                    Powered by <span class="text-[#FF6B9D] font-bold">Doodlune</span> 🌸
+                </p>
+            </div>
         </div>
     </div>
+
 </body>
 </html>
