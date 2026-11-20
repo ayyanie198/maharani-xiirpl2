@@ -12,22 +12,26 @@ use Illuminate\Support\Facades\Storage;
 class AdminUmkm extends Controller
 {
     public function dashboard()
-    {
-        $totalWebsite = Portofolio::count();
-        $websiteAktif = Portofolio::where('status_website', 'aktif')->count();
-        $websiteDraft = Portofolio::where('status_website', 'draft')->count();
-        $websiteNonaktif = Portofolio::where('status_website', 'nonaktif')->count();
-        $totalProduk = Produk::count();
-        $aktivitasHariIni = LogAktivitas::whereDate('created_at', today())->count();
-        $aktivitasTerbaru = LogAktivitas::with('admin')->orderBy('created_at', 'desc')->take(5)->get();
-        $websiteTerbaru = Portofolio::orderBy('created_at', 'desc')->take(5)->get();
+{
+    $totalWebsite = Portofolio::count();
+    $websiteAktif = Portofolio::where('status_website', 'aktif')->count();
+    $websiteDraft = Portofolio::where('status_website', 'draft')->count();
+    $websiteNonaktif = Portofolio::where('status_website', 'nonaktif')->count();
+    $totalProduk = Produk::count();
+    $aktivitasHariIni = LogAktivitas::whereDate('created_at', today())->count();
+    $aktivitasTerbaru = LogAktivitas::with('admin')->orderBy('created_at', 'desc')->take(5)->get();
+    $websiteTerbaru = Portofolio::orderBy('created_at', 'desc')->take(5)->get();
 
-        return view('Admin.dashboard', compact(
-            'totalWebsite', 'websiteAktif', 'websiteDraft', 'websiteNonaktif',
-            'totalProduk', 'aktivitasHariIni', 'aktivitasTerbaru', 'websiteTerbaru'
-        ));
-    }
+    // 🌟 TAMBAHKAN INI: Hitung ulasan yang statusnya 0 (Pending)
+    $pendingUlasan = \App\Models\Ulasan::where('status', 0)->count();
 
+
+    return view('Admin.dashboard', compact(
+        'totalWebsite', 'websiteAktif', 'websiteDraft', 'websiteNonaktif',
+        'totalProduk', 'aktivitasHariIni', 'aktivitasTerbaru', 'websiteTerbaru',
+        'pendingUlasan' // 🌟 JANGAN LUPA DIMASUKKAN KE COMPACT
+    ));
+}
     public function index()
 {
     $umkm = Portofolio::with('admin')->orderBy('created_at', 'desc')->get();

@@ -34,7 +34,6 @@
         }
     </script>
     <style>
-        /* Glass yang lebih solid agar tidak nyaru */
         .glass { 
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(16px); 
@@ -64,11 +63,6 @@
             box-shadow: 0 20px 40px -10px rgba(255, 107, 157, 0.25); 
             border-color: rgba(255, 107, 157, 0.6); 
         }
-        .text-gradient { 
-            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #FFF5F7; }
         ::-webkit-scrollbar-thumb { background: #FFD1DC; border-radius: 4px; }
@@ -77,7 +71,7 @@
 </head>
 <body class="bg-[#FFF5F7] text-[#4A3040] font-sans antialiased overflow-x-hidden">
 
-    <!-- Navbar Glass -->
+    <!-- Navbar -->
     <nav class="fixed w-full z-50 glass border-b border-pink-200/50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
@@ -90,7 +84,7 @@
                     <a href="#keunggulan" class="text-[#6D4C41] hover:text-[#FF6B9D] font-medium transition">Keunggulan</a>
                     <a href="#ulasan" class="text-[#6D4C41] hover:text-[#FF6B9D] font-medium transition">Ulasan</a>
                     <a href="#template" class="text-[#6D4C41] hover:text-[#FF6B9D] font-medium transition">Template</a>
-                    <a href="https://wa.me/6289519085299" target="_blank" class="bg-[#FF6B9D] hover:bg-[#E85D85] text-white px-6 py-2.5 rounded-full font-semibold transition shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="https://wa.me/6289519085299" target="_blank" class="bg-[#FF6B9D] hover:bg-[#E85D85] text-white px-6 py-2.5 rounded-full font-semibold transition shadow-lg shadow-pink-500/30 flex items-center gap-2">
                         <i class="fab fa-whatsapp text-lg"></i> Konsultasi
                     </a>
                 </div>
@@ -110,7 +104,7 @@
         </div>
     </nav>
 
-    <!-- 🌟 HERO: Background Foto + Overlay Transparan -->
+    <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
         @if($heroImage)
             <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $heroImage }}');"></div>
@@ -118,13 +112,11 @@
             <div class="absolute inset-0 bg-gradient-to-br from-[#8B3A52] via-[#C44569] to-[#4A3040]"></div>
         @endif
 
-        <!-- Overlay yang lebih gelap agar teks putih sangat terbaca -->
         <div class="absolute inset-0 bg-gradient-to-b from-[#4A3040]/90 via-[#4A3040]/70 to-[#FFF5F7]"></div>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,107,157,0.3),transparent_50%)]"></div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                <!-- Kiri: Teks -->
                 <div class="text-center lg:text-left space-y-8">
                     <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-white text-[#4A3040] text-sm font-semibold shadow-sm">
                         <img src="{{ asset('images/logo-doodlune.jpeg') }}" alt="Logo" class="h-6 w-6 object-contain rounded-full">
@@ -137,7 +129,7 @@
                         Temukan template website modern untuk bisnis kamu. Pilih desain, kirim data, dan biarkan <strong class="text-white">Doodlune</strong> menyiapkan website profesional untuk bisnismu.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#template" class="bg-[#FF6B9D] hover:bg-[#E85D85] text-white px-8 py-4 rounded-2xl font-semibold text-lg transition shadow-xl shadow-pink-500/40 hover:shadow-pink-500/60 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <a href="#template" class="bg-[#FF6B9D] hover:bg-[#E85D85] text-white px-8 py-4 rounded-2xl font-semibold text-lg transition shadow-xl shadow-pink-500/40 transform hover:-translate-y-1 flex items-center justify-center gap-2">
                             Lihat Template <i class="fas fa-arrow-right"></i>
                         </a>
                         <a href="https://wa.me/6289519085299" target="_blank" class="glass-white hover:bg-white text-[#4A3040] border-2 border-white/60 px-8 py-4 rounded-2xl font-semibold text-lg transition flex items-center justify-center gap-2">
@@ -146,7 +138,6 @@
                     </div>
                 </div>
 
-                <!-- Kanan: Kartu Glass "Preview Website" -->
                 <div class="relative flex justify-center lg:justify-end">
                     <div class="glass-dark p-4 md:p-5 rounded-[2rem] relative overflow-hidden group animate-float border border-white/30 shadow-2xl w-full max-w-md">
                         <div class="flex items-center gap-2 px-3 py-2 mb-3 rounded-xl bg-white/10">
@@ -179,27 +170,9 @@
                                     <p class="text-[10px] uppercase tracking-wider text-pink-100">Rating</p>
                                 </div>
                             </div>
-                            <div class="mt-5 flex items-center justify-between">
-                                <div class="flex text-yellow-300 text-sm">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                </div>
-                                <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold">LIVE 🟢</span>
-                            </div>
-                        </div>
-                        <div class="absolute -top-3 -right-3 glass px-4 py-2 rounded-full flex items-center gap-2 shadow-lg animate-bounce" style="animation-duration: 3s;">
-                            <i class="fas fa-check-circle text-[#25D366]"></i>
-                            <span class="text-xs font-bold text-[#4A3040]">Premium</span>
-                        </div>
-                        <div class="absolute -bottom-3 -left-3 glass px-4 py-2 rounded-full flex items-center gap-2 shadow-lg animate-bounce" style="animation-duration: 4s;">
-                            <i class="fas fa-bolt text-yellow-500"></i>
-                            <span class="text-xs font-bold text-[#4A3040]">Super Cepat</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 animate-bounce">
-                <i class="fas fa-chevron-down text-2xl"></i>
             </div>
         </div>
     </section>
@@ -260,7 +233,7 @@
         </div>
     </section>
 
-    <!-- 🌟 ULASAN DINAMIS + FORM INPUT -->
+    <!-- 🌟 ULASAN + FORM INPUT (SUDANG DIPERBAIKI DENGAN ERROR VALIDATION) -->
     <section id="ulasan" class="py-24 bg-[#FFF5F7] relative overflow-hidden">
         <div class="absolute top-0 left-0 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -284,7 +257,6 @@
                     <div class="flex text-yellow-400 text-sm mb-4">
                         @for($i = 0; $i < ($t['rating'] ?? 5); $i++)<i class="fas fa-star"></i>@endfor
                     </div>
-                    <!-- Teks ulasan dibuat lebih gelap agar sangat terbaca -->
                     <p class="text-[#4A3040] font-medium mb-6 leading-relaxed">"{{ $t['pesan'] }}"</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B9D] to-[#C44569] flex items-center justify-center text-white font-bold text-lg shadow-md">
@@ -299,36 +271,56 @@
                 @endforeach
             </div>
 
-            <!-- FORM INPUT ULASAN BARU -->
+            <!-- 🌟 FORM INPUT ULASAN BARU (SUDAH ADA ERROR VALIDATION) -->
             <div class="max-w-2xl mx-auto glass-card p-8 md:p-10 rounded-3xl shadow-xl border-2 border-pink-100">
                 <h3 class="font-serif text-2xl font-bold text-center mb-2 text-[#4A3040]">Bagikan Pengalamanmu ✍️</h3>
                 <p class="text-center mb-6 text-[#6D4C41]">Sudah pakai jasa Doodlune? Yuk, tinggalkan ulasanmu di sini!</p>
-                
+
+                {{-- NOTIF SUKSES --}}
                 @if(session('success_ulasan'))
                     <div class="mb-6 bg-green-50 border-l-4 border-green-500 text-green-800 p-4 rounded-xl text-sm flex items-center">
                         <i class="fas fa-check-circle mr-3 text-lg"></i> {{ session('success_ulasan') }}
                     </div>
                 @endif
 
+                {{-- 🌟 TAMPILKAN ERROR VALIDASI (INI YANG TADI HILANG!) --}}
+                @if($errors->any())
+                    <div class="mb-6 bg-red-50 border-l-4 border-red-500 text-red-800 p-4 rounded-xl text-sm">
+                        <strong><i class="fas fa-exclamation-circle mr-2"></i>Periksa kembali isianmu:</strong>
+                        <ul class="list-disc ml-6 mt-2">
+                            @foreach($errors->all() as $err)
+                                <li>{{ $err }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('ulasan.store') }}" method="POST" class="space-y-5">
-                    @csrf
+                    @csrf  {{-- ⚠️ WAJIB! Tanpa ini Laravel tolak dengan error 419 --}}
+
                     <div>
                         <label class="block text-sm font-bold text-[#4A3040] mb-2">Nama Kamu</label>
-                        <input type="text" name="nama" required class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] focus:border-transparent bg-white text-[#4A3040] placeholder-[#C44569]" placeholder="Contoh: Budi Santoso">
+                        <input type="text" name="nama" value="{{ old('nama') }}" required
+                            class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] bg-white text-[#4A3040] placeholder-[#C44569]"
+                            placeholder="Contoh: Budi Santoso">
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-bold text-[#4A3040] mb-2">Rating</label>
-                        <select name="rating" required class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] focus:border-transparent bg-white text-[#4A3040]">
-                            <option value="5">⭐⭐⭐⭐⭐ (Sangat Puas)</option>
-                            <option value="4">⭐⭐⭐⭐ (Puas)</option>
-                            <option value="3">⭐⭐⭐ (Cukup)</option>
+                        <select name="rating" required class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] bg-white text-[#4A3040]">
+                            <option value="5" {{ old('rating') == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (Sangat Puas)</option>
+                            <option value="4" {{ old('rating') == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ (Puas)</option>
+                            <option value="3" {{ old('rating') == 3 ? 'selected' : '' }}>⭐⭐⭐ (Cukup)</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-[#4A3040] mb-2">Ulasan Kamu</label>
-                        <textarea name="pesan" rows="4" required class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] focus:border-transparent bg-white text-[#4A3040] placeholder-[#C44569] resize-none" placeholder="Ceritakan pengalamanmu menggunakan Doodlune..."></textarea>
+                        <label class="block text-sm font-bold text-[#4A3040] mb-2">
+                            Ulasan Kamu <span class="text-red-500 text-xs">(min. 10 karakter)</span>
+                        </label>
+                        <textarea name="pesan" rows="4" required
+                            class="w-full px-5 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#FF6B9D] bg-white text-[#4A3040] placeholder-[#C44569] resize-none"
+                            placeholder="Ceritakan pengalamanmu menggunakan Doodlune...">{{ old('pesan') }}</textarea>
                     </div>
 
                     <button type="submit" class="w-full py-4 rounded-xl font-bold text-white text-lg bg-[#FF6B9D] hover:bg-[#E85D85] transition shadow-lg shadow-pink-500/30 transform hover:-translate-y-1">
@@ -360,7 +352,7 @@
                         <p class="text-[#6D4C41] text-sm mb-6 flex-1">{{ $tpl['desc'] }}</p>
                         <div class="flex gap-3 mt-auto">
                             <a href="{{ url('/templates/' . $tpl['id']) }}" class="flex-1 text-center border border-pink-200 text-[#4A3040] px-4 py-2.5 rounded-xl font-medium hover:bg-pink-50 transition text-sm">Detail</a>
-                            <a href="https://wa.me/6289519085299" target="_blank" class="flex-1 text-center bg-[#FF6B9D] text-white px-4 py-2.5 rounded-xl font-medium hover:bg-[#E85D85] transition text-sm shadow-md shadow-pink-500/20">Pesan</a>
+                            <a href="https://wa.me/6289519085299" target="_blank" class="flex-1 text-center bg-[#FF6B9D] text-white px-4 py-2.5 rounded-xl font-medium hover:bg-[#E85D85] transition text-sm shadow-md">Pesan</a>
                         </div>
                     </div>
                 </div>
@@ -406,7 +398,6 @@
 
     <!-- CTA -->
     <section class="py-24 bg-gradient-to-br from-[#FF6B9D] to-[#8B3A52] relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-30"></div>
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
             <h2 class="font-serif text-4xl md:text-5xl font-bold text-white mb-6">Siap Mengembangkan Bisnis Anda?</h2>
             <p class="text-xl text-pink-100 mb-10 max-w-2xl mx-auto">Jangan biarkan bisnis Anda tertinggal. Miliki website profesional dan tingkatkan kredibilitas mulai hari ini.</p>

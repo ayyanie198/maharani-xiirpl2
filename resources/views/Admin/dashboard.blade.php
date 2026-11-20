@@ -4,6 +4,25 @@
 @section('page-title', 'Dashboard Overview')
 
 @section('content')
+
+{{-- 🌟 CARD NOTIFIKASI ULASAN PENDING --}}
+@if($pendingUlasan > 0)
+<div class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl shadow-sm flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <div class="p-3 bg-yellow-100 rounded-full">
+            <i class="fas fa-bell text-yellow-600 text-xl animate-bounce"></i>
+        </div>
+        <div>
+            <h3 class="font-bold text-yellow-800 text-lg">Ada {{ $pendingUlasan }} Ulasan Baru Menunggu Persetujuan!</h3>
+            <p class="text-yellow-700 text-sm">Silakan cek menu <strong>Kelola Ulasan</strong> untuk menyetujui atau menghapus.</p>
+        </div>
+    </div>
+    <a href="{{ route('admin.ulasan.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow-md">
+        Cek Sekarang <i class="fas fa-arrow-right ml-1"></i>
+    </a>
+</div>
+@endif
+
 <div class="space-y-8">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between">

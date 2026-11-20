@@ -98,7 +98,6 @@
         /* ============================================ */
         .dark body { background-color: #1a0f14 !important; color: #FFE4EC !important; }
         
-        /* Paksa semua background putih jadi gelap */
         .dark .bg-white, .dark .bg-white\/80, .dark .bg-white\/90 { 
             background-color: #2d1f27 !important; color: #FFE4EC !important; 
         }
@@ -107,19 +106,16 @@
             background-color: #3d2833 !important; 
         }
 
-        /* Border jadi gelap */
         .dark .border-\[\#FFD1DC\], .dark .border-\[\#FFF0F5\], .dark .border-\[\#EFEBE9\], .dark .border-\[\#D7CCC8\],
         .dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300, .dark .border-green-400, .dark .border-red-400 { 
             border-color: #5a3a4a !important; 
         }
 
-        /* Teks jadi terang */
         .dark .text-\[\#4A3040\], .dark .text-\[\#3E2723\], .dark .text-\[\#5D4037\], .dark .text-\[\#8D6E63\], .dark .text-\[\#6D4C41\] { color: #FFD1DC !important; }
         .dark .text-gray-500, .dark .text-gray-600, .dark .text-gray-700, .dark .text-gray-800, .dark .text-gray-900 { color: #FFE4EC !important; }
         .dark .text-\[\#C44569\] { color: #FFB6C1 !important; }
         .dark .text-green-800, .dark .text-red-800, .dark .text-yellow-800 { color: #FFE4EC !important; }
 
-        /* Badge Status di Dark Mode */
         .dark .bg-green-100 { background-color: rgba(16,185,129,0.2) !important; }
         .dark .text-green-700, .dark .text-green-800 { color: #6EE7B7 !important; }
         .dark .bg-yellow-100 { background-color: rgba(245,158,11,0.2) !important; }
@@ -127,42 +123,32 @@
         .dark .bg-red-100 { background-color: rgba(239,68,68,0.2) !important; }
         .dark .text-red-700, .dark .text-red-800 { color: #FCA5A5 !important; }
 
-        /* Input & Form */
         .dark input, .dark select, .dark textarea { background-color: #3d2833 !important; color: #FFE4EC !important; border-color: #5a3a4a !important; }
         .dark input::placeholder, .dark textarea::placeholder { color: #C9A0B0 !important; }
 
-        /* Sidebar */
         .dark #sidebar { background-color: #241019 !important; border-color: #3d2833 !important; }
         .dark .sidebar-link { color: #FFD1DC !important; }
         .dark .sidebar-link:hover, .dark .sidebar-link.active { background: linear-gradient(90deg, #C44569 0%, #FF6B9D 100%) !important; color: white !important; }
 
-        /* Code Element */
         .dark code { background-color: #3d2833 !important; color: #FFB6C1 !important; }
 
-        /* Hover Effect */
         .dark .hover\:bg-\[\#FFF5F7\]:hover, .dark .hover\:bg-\[\#FAF7F5\]:hover, .dark .hover\:bg-\[\#FFF0F5\]:hover { background-color: #3d2833 !important; }
 
-        /* Alert Toast */
         .dark .bg-green-50 { background-color: rgba(16,185,129,0.15) !important; }
         .dark .text-green-800 { color: #6EE7B7 !important; }
         .dark .bg-red-50 { background-color: rgba(239,68,68,0.15) !important; }
         .dark .text-red-800 { color: #FCA5A5 !important; }
 
-        /* Table Row Border */
         .dark .divide-\[\#FFF0F5\] > *, .dark .divide-y > * { border-color: #3d2833 !important; }
 
-        /* File Upload Button */
         .dark .file\:bg-\[\#FFF0F5\]::file-selector-button, .dark .file\:bg-blue-50::file-selector-button, .dark .file\:bg-purple-50::file-selector-button { background-color: #4a2f3d !important; color: #FFD1DC !important; }
 
-        /* Glass */
         .dark .glass, .dark .glass-card { background: rgba(45, 31, 39, 0.85) !important; border-color: #4a2f3d !important; }
 
-        /* Scrollbar Dark */
         .dark ::-webkit-scrollbar-track { background: #1a0f14; }
         .dark ::-webkit-scrollbar-thumb { background: #5a3a4a; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #FF6B9D; }
 
-        /* 🌟 PERBAIKAN KHUSUS: Tabel Responsif di Dark Mode */
         @media (max-width: 768px) {
             .dark .responsive-table tr { background-color: #2d1f27 !important; border-color: #5a3a4a !important; }
             .dark .responsive-table td { border-bottom-color: #3d2833 !important; }
@@ -198,6 +184,21 @@
             </a>
             <a href="{{ route('admin.kelola.index') }}" class="sidebar-link flex items-center px-4 py-3 rounded-xl text-[#4A3040] {{ request()->routeIs('admin.kelola.*') ? 'active' : '' }}">
                 <i class="fas fa-users-cog w-6"></i><span class="font-semibold">Kelola Admin</span>
+            </a>
+
+            {{-- 🌟 MENU KELOLA ULASAN DENGAN BADGE NOTIFIKASI --}}
+            @php
+                $pendingCount = \App\Models\Ulasan::where('status', 0)->count();
+            @endphp
+            <a href="{{ route('admin.ulasan.index') }}" class="sidebar-link flex items-center justify-between px-4 py-3 rounded-xl text-[#4A3040] {{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
+                <div class="flex items-center">
+                    <i class="fas fa-comments w-6"></i><span class="font-semibold">Kelola Ulasan</span>
+                </div>
+                @if($pendingCount > 0)
+                    <span class="bg-red-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-full animate-pulse">
+                        {{ $pendingCount }}
+                    </span>
+                @endif
             </a>
         </nav>
 
